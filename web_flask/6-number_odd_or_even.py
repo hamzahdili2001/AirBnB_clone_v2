@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """script that starts a Flask web application"""
-from flask import Flask
+from flask import Flask, render_template
 
 
 app = Flask(__name__)
@@ -37,6 +37,18 @@ def python_text(text="is cool"):
 def number(n):
     """display number if int"""
     return "%d is a number" % n
+
+
+@app.route("/number_template/<int:n>", strict_slashes=False)
+def render_number(n):
+    """that render a template with number if int"""
+    return render_template("5-number.html", number=n)
+
+
+@app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
+def number_odd_or_even(n):
+    """Function to display a HTML page only if n is an integer"""
+    return render_template("6-number_odd_or_even.html", number=n)
 
 
 if __name__ == "__main__":
