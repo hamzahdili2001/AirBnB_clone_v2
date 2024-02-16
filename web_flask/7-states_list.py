@@ -3,21 +3,25 @@
 
 from models import storage
 from flask import Flask, render_template
+from models.state import State
 
 app = Flask(__name__)
-
-
-@app.route("/states_list", strict_slashes=False)
-def states_list():
-    """Display a HTML page"""
-    states = storage.all("State")
-    return render_template("7-states_list.html", states=states)
 
 
 @app.teardown_appcontext
 def teardown_db(exception):
     """Function that removes the current SQLAlchemy Session"""
     storage.close()
+
+
+@app.route("/states_list", strict_slashes=False)
+def states_list():
+    """Display a HTML page"""
+    states = storage.all(State)
+    dict_to_html = {value.id: value.name for value in states.values()}
+    return render_template(
+        "7-states_list.html", Table="States", items=dict_to_html
+    )
 
 
 if __name__ == "__main__":
